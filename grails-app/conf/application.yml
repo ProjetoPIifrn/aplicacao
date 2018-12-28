@@ -88,29 +88,34 @@ endpoints:
 ---
 hibernate:
     cache:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         queries: false
         use_second_level_cache: false
         use_query_cache: false
 dataSource:
-    pooled: true
-    jmxExport: true
-    driverClassName: org.h2.Driver
-    username: sa
-    password: ''
+        pooled: true
+        jmxExport: true
 
 environments:
     development:
         dataSource:
             dbCreate: create-drop
-            url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
-    test:
-        dataSource:
-            dbCreate: update
-            url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
-    production:
-        dataSource:
-            dbCreate: none
-            url: jdbc:h2:./prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            url: jdbc:mysql://localhost:3306/big
+            driverClassName: com.mysql.jdbc.Driver
+            username: root
+            password: ''
+
+            test:
+                dataSource:
+                    dbCreate: update
+                    url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            production:
+                dataSource:
+                    dbCreate: create-drop
+                    url: jdbc:h2:mem:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+                    driverClassName: org.h2.Driver
+                    username: sa
+                    password: ''
             properties:
                 jmxEnabled: true
                 initialSize: 5

@@ -1,11 +1,11 @@
 package aplicacao
 
 class SupervisorLab {
-    String nome;
-    String matricula;
-    String turma;
-    String senha;
-    Lab lab;
+    String nome
+    String matricula
+    String turma
+    String senha
+    Lab lab
 
     static constraints = {
         nome(minSize: 4, maxSize: 100, nullable: false ,unique: false )

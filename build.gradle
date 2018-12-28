@@ -35,7 +35,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
     compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
+    provided "org.springframework.boot:spring-boot-starter-tomcat"
     compile "org.grails:grails-web-boot"
     compile "org.grails:grails-logging"
     compile "org.grails:grails-plugin-rest"
@@ -64,6 +64,10 @@ dependencies {
     testRuntime "org.seleniumhq.selenium:selenium-firefox-driver:3.6.0"
     testRuntime "org.seleniumhq.selenium:selenium-remote-driver:3.6.0"
     testRuntime "org.seleniumhq.selenium:selenium-api:3.6.0"
+    runtime "mysql:mysql-connector-java:5.1.36"
+
+    // JAR PARA O HEROKU
+    compile 'com.github.jsimone:webapp-runner:8.5.11.3'
 }
 
 bootRun {
@@ -86,3 +90,26 @@ assets {
     minifyJs = true
     minifyCss = true
 }
+
+/*
+    TRECHO ADICIONADO PARA O DEPLOY NO HEROKU
+ */
+
+task stage(){
+    dependsOn clean, war
+}
+
+war.mustRunAfter clean
+
+task copyToLib(type: Copy) {
+    into "$buildDir/server"
+    from(configurations.compile) {
+        include "webapp-runner*"
+    }
+}
+
+stage.dependsOn(copyToLib)
+
+/*
+    FIM DE TRECHO
+ */
